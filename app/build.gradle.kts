@@ -43,6 +43,9 @@ android {
     }
     buildTypes {
         release {
+            optimization {
+                enable = true
+            }
             signingConfig = signingConfigs.findByName("release") ?: signingConfigs.getByName("debug")
         }
     }

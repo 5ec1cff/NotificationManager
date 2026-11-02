@@ -42,6 +42,8 @@ APK 文件名参考 MyInjectorPriv，包含当前 Git 提交次数和短哈希�
 
 应用版本名为 `<提交次数>-<短哈希>`，需在已有提交的 Git 工作区构建。
 
+Release 按 [AGP 9.3+ 的优化配置](https://developer.android.com/topic/performance/app-optimization/enable-app-optimization)启用 R8 代码优化、压缩、混淆及资源裁剪，使用默认的 Android 优化规则和依赖自带的 consumer rules。构建输出的 `app/build/outputs/mapping/release/mapping.txt` 应与 APK 一起保留，以便还原崩溃堆栈。
+
 Release 默认读取仓库根目录的 `keystore.properties`，配置项与 MyInjectorPriv 一致：
 
 ```properties
@@ -81,6 +83,7 @@ PendingIntent 的 Binder 句柄只留在内存中，更新、进程重启或系�
 ## 已完成验证
 
 - Debug APK 构建、规则单元测试、Android 16 上的 Room/快照集成测试通过。
+- R8 优化后的 Release 构建、规则单元测试及 Release Lint 通过。独立 Android 10、16 模拟器验证启动、通知监听和详情；Android 16 额外核对归档 JSON 的系统字段、extras、渠道、图标，检查 JSON 弹窗与复制、应用/渠道名单页面、设置重启后保留及系统通知移除回调；Android 10 验证当前系统通知的 PendingIntent 能打开设置。当前无需额外的应用 keep rules。
 - Android Lint：0 错误，2 项非阻断建议（Gradle 补丁版本和 KTX 写法）。
 - 独立 Android 16 模拟器验证了真实 NotificationListener 回调：系统通知标题、正文、图标路径入库，稍后提醒后的移除时间与原因码 18 正确。
 - 人工检查列表与详情显示，并检查运行日志无应用崩溃。Android 10–15、小米系统、后台启动受限场景和大规模数据性能尚未做实机验证。
